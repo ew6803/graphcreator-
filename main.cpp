@@ -19,10 +19,11 @@ void ADD(vector <vertex* > v, char* first, char* second, int weight);
 void REMOVEE(vector <vertex*> &v, char* first, char* second);
 void REMOVEV(vector <vertex*> &v, char* name); 
 void PRINT(vector <vertex*> v); 
-void FIND(vector <vertex*> v, vertex *first, vertext* second);
+void FIND(vector <vertex*> v, vertex *first, vertex* second);
+bool CONTAINS(vector <vertex*> v, vertex* ver); 
 
 int main () {
-  vector <vertext*> v;
+  vector <vertex*> v;
   bool running = true; 
   while (running == true) {
   cout << "Welcome to Graph Creator, type 'ADDE' to add an edge, type 'ADDV' to add a vertex, type 'PRINT' to print, type 'REMOVEE' to remove an edge, type 'REMOVEV' to remove a vertex, type 'FIND' to find the shortest path, and type 'EXIT' to quit" << endl;
@@ -43,7 +44,7 @@ int main () {
   }
   
   else if (strcmp(input, "ADDV") == 0) {
-    char* name = char();
+    char* name = new char();
     cout << "What is the name of the vertex? \n";
     cin.getline(name, 20);
     vertex *temp = new vertex();
@@ -122,12 +123,34 @@ void ADD(vector <vertex* > v, char* first, char* second, int weight) {
 }
 
 void REMOVEE(vector <vertex*> &v, char* first, char* second) {
-
+  vertex *v1 = NULL;
+  vertex *v2 = NULL;
+  for (vector <vertex*> ::iterator it = v.begin(); it !=v.end(); ++it) {
+    if (strcmp((*it) -> name, first) == 0) {
+      v1 = *it;
+    }
+    else if (strcmp((*it) -> name, second) == 0) {
+      v2 = *it;
+    }
+  }
+    vector <vertex*> fEdges = v1 -> edges;
+    vector <int> fWeights = v1 -> weight;
+    int count = 0;
+    for (vector < vertex*> ::iterator it = fEdges.begin(); it !=fEdges.end(); ++it) {
+      count++;
+      if ((*it) == v2) {
+	fEdges.erase(it);
+	fWeights.erase(fWeights.begin() + (count - 1));
+	v1 -> edges = fEdges;
+	v1 -> weight = fWeights;
+	break; 
+      }
+    }
 }
 
 void REMOVEV(vector <vertex*> &v, char* name) {
   vertex* temp = NULL;
-  for (vector <vertex*> ::iterator it = v.begin(): it != v.end(): ++it) {
+  for (vector <vertex*> ::iterator it = v.begin(); it != v.end(); ++it) {
     if (strcmp((*it) -> name, name) == 0) {
       temp = *it;
       v.erase(it);
@@ -135,12 +158,63 @@ void REMOVEV(vector <vertex*> &v, char* name) {
       break; 
     }
   }
+  for (vector < vertex*> ::iterator it = v.begin(); it != v.end(); ++it) {
+    vector <vertex*> vEdges = (*it) -> edges;
+    vector <int> vWeight = (*it) -> weight;
+    int count = 0;
+    for (vector < vertex*> ::iterator ite = vEdges.begin(); ite != vEdges.end(); ++ite) {
+      count++;
+      if ((*ite) == temp) {
+	vEdges.erase(ite);
+	vWeight.erase(vWeight.begin() + (count - 1));
+	(*it) -> edges = vEdges;
+	(*it) -> weight = vWeight;
+	break; 
+      }
+    }
+  }
 }
 
+bool CONTAINS(vector <vertex*> v, vertex* ver) {
+  if (std::find(v.begin(), v.end(), ver) != v.end()) {
+    return true; 
+  }
+  return false; 
+}
+ 
 void PRINT(vector <vertex*> v) {
-
+  cout << " ";
+  for (vector <vertex*> ::iterator it = v.begin(); it != v.end(); ++it) {
+    cout << "       " << (*it) -> name; 
+  }
+  for (vector < vertex*> ::iterator it = v.begin(); it != v.end(); ++it) {
+    cout << endl;
+    cout << (*it) -> name;
+    vector <vertex*> connect = (*it) -> edges;
+    vector <int> length = (*it) -> weight;
+    for (vector < vertex*> ::iterator ite = v.begin(); ite != v.end(); ++ite) {
+      int count = 0;
+      bool found = false;
+      if (connect.empty()) {
+	cout << "       " << "0"; 
+      }
+      else {
+      for (vector <vertex*> ::iterator iter = connect.begin(); iter != connect.end(); ++iter) {
+	count ++;
+	if ((*iter) -> name == (*ite) -> name) {
+	  cout << "       " << length.at(count - 1);
+	  found = true; 
+	}
+      }
+      if (!found) {
+	cout << "       " << "0"; 
+      }
+      }
+    }
+  }
+  cout << endl; 
 }
 
-void FIND(vector <vertex*> v, vertex *first, vertext* second) {
+void FIND(vector <vertex*> v, vertex *first, vertex* second) {
 
 }
