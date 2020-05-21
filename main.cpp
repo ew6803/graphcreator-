@@ -1,4 +1,6 @@
-//asdfasdfasdfadf
+//This program is a graph creator, it allows users to add vertexes and edges, delete vertexes and edges, find the shortest path between vertexes, and print out the graph in matrix form.
+//Ethan Wang
+//5/20/20
 
 #include <iostream>
 #include <cstring>
@@ -9,12 +11,14 @@
 
 using namespace std;
 
+//Vertex struct with name, connections for edges, and edge weights
 struct vertex {
   char* name;
   vector <vertex*> edges;
   vector <int> weight; 
 };
 
+//Function to add an edge off of two preexisting vertexes
 void ADD(vector <vertex* > v, char* first, char* second, int weight) {
   vertex* v1 = NULL;
   vertex* v2 = NULL;
@@ -32,6 +36,7 @@ void ADD(vector <vertex* > v, char* first, char* second, int weight) {
   }
 }
 
+//Function to remove an edge given the two vertexes
 void REMOVEE(vector <vertex*> &v, char* first, char* second) {
   vertex *v1 = NULL;
   vertex *v2 = NULL;
@@ -59,6 +64,7 @@ void REMOVEE(vector <vertex*> &v, char* first, char* second) {
     }
 }
 
+//Function to remove a vertex
 void REMOVEV(vector <vertex*> &v, char* name) {
   vertex* temp = NULL;
   for (vector <vertex*> ::iterator it = v.begin(); it != v.end(); ++it) {
@@ -86,13 +92,15 @@ void REMOVEV(vector <vertex*> &v, char* name) {
   }
 }
 
+//Function to check if a certain vertex is contained inside the given vertex
 bool CONTAINS(vector <vertex*> v, vertex* ver) {
   if (std::find(v.begin(), v.end(), ver) != v.end()) {
     return true; 
   }
   return false; 
 }
- 
+
+//Prints out "graph" in form of a matrice 
 void PRINT(vector <vertex*> v) {
   cout << " ";
   for (vector <vertex*> ::iterator it = v.begin(); it != v.end(); ++it) {
@@ -126,6 +134,7 @@ void PRINT(vector <vertex*> v) {
   cout << endl; 
 }
 
+//Function to find the shortest distance between two vertexes 
 void FIND(vector <vertex*> v, vertex *start, vertex* end) {
   vector < vector <vertex*>> path;
   vector < vertex*> nPath;
@@ -211,6 +220,7 @@ void FIND(vector <vertex*> v, vertex *start, vertex* end) {
       }
     }
 
+//Main line & UI
 int main () {
   vector <vertex*> v;
   bool running = true; 

@@ -107,7 +107,7 @@ void PRINT(vector <vertex*> v) {
       int count = 0;
       bool found = false;
       if (connect.empty()) {
-	cout << "       " << "_"; 
+	cout << "       " << "-"; 
       }
       else {
       for (vector <vertex*> ::iterator iter = connect.begin(); iter != connect.end(); ++iter) {
@@ -118,7 +118,7 @@ void PRINT(vector <vertex*> v) {
 	}
       }
       if (!found) {
-	cout << "       " << "_"; 
+	cout << "       " << "-"; 
       }
       }
     }
