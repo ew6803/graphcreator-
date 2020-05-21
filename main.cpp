@@ -19,7 +19,7 @@ void ADD(vector <vertex* > v, char* first, char* second, int weight);
 void REMOVEE(vector <vertex*> &v, char* first, char* second);
 void REMOVEV(vector <vertex*> &v, char* name); 
 void PRINT(vector <vertex*> v); 
-void FIND(vector <vertex*> v, vertex *first, vertex* second);
+void FIND(vector <vertex*> v, vertex *start, vertex* end);
 bool CONTAINS(vector <vertex*> v, vertex* ver); 
 
 int main () {
@@ -215,6 +215,91 @@ void PRINT(vector <vertex*> v) {
   cout << endl; 
 }
 
-void FIND(vector <vertex*> v, vertex *first, vertex* second) {
+void FIND(vector <vertex*> v, vertex *start, vertex* end) {
+  vector < vector <vertex*>> path;
+  vector < vertex*> nPath;
+  vector < vertex*> sst;
+  vector <int> length;
+  vector < vertex*> co;
+  vector <vertex *> op;
+  co.push_back(start);
+  path.push_back(co);
+  sst.push_back(start);
+  length.push_back(0);
+  vertex* current;
+  vertex* next;
+  vertex* previous;
+  int cLength;
+  int count;
+  int count2;
+  int min;
+  bool fin = false;
+  bool found;
+  while (fin == false) {
+    found = false;
+    fin = true;
+    count = 0;
+    min = std::numeric_limits < int > ::max();
+    for (vector < vertex* > ::iterator it = sst.begin(); it != sst.end(); ++it) {
+      count++;
+      current = (*it);
+      cLength = length.at(count - 1);
+      co = current -> edges;
+      count2 = 0;
+      if (!co.empty()) {
+	fin = false;
+	for (vector < vertex*> ::iterator it2 = co.begin(); it2 != co.end(); ++it2) {
+	  count2++;
+	  if (!CONTAINS(sst, (*it2))) {
+	    if ((cLength + current -> weight.at(count2 - 1)) < min) {
+	      min = cLength + current -> weight.at(count2 - 1); 
+	      next = (*it2);
+	      previous = current;
+	      found = true; 
+	  }
+	}
+      }
+    }
+  }
+	if (fin || !found) {
+          cout << "No Path \n";
+	  return; 
+	}
+	for (vector < vector <vertex*>> ::iterator it = path.begin(); it != path.end(); ++it) {
+	  op = (*it);
+	  if (op.back() == previous) {
+	    nPath = (*it);
+	    nPath.push_back(next);
+	    path.push_back(nPath);
+	    length.push_back(min);
+	    sst.push_back(next);
+	    break; 
+	  }
+	}
+	for (vector <vertex*>:: iterator it = nPath.begin(); it != nPath.end(); ++it) {
+	  bool exist = false;
+	  for (vector <vertex*>:: iterator it1 = v.begin(); it1 != v.end(); ++it) {
+            if (strcmp((*it) -> name, (*it1) -> name) == 0) {
+	      exist = true;
+	      break; 
+	    }
+	  }
+	  if (!exist) {
+	    cout << "No Path \n";
+	    return; 
+	  }
+	}
+	if (next == end) {
+	  cout << "Shortest Path: \n";
+	  for (vector < vertex*> ::iterator it = nPath.begin(); it != nPath.end(); ++it) {
+	    cout << (*it) -> name << " "; 
+	  }
+	  cout << "\n Total Weight: " << min << endl;
+	  return; 
+	}
+      }
+    }
+  
 
-}
+
+
